@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  email     String   @unique
+  password  String
+  role      String   @default("user")
+  gyms      Gym[]    @relation("GymAdmin")
+  reviews   Review[]
+  favorites Favorite[]
+  follows   Follow[]
+}
+
+model Gym {
+  id          Int      @id @default(autoincrement())
+  name        String
+  location    String
+  description String?
+  adminId     Int
+  admin       User     @relation("GymAdmin", fields: [adminId], references: [id])
+  reviews     Review[]
+  news        News[]
+  follows     Follow[]
+
+  Favorite Favorite[]
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  rating    Int
+  comment   String?
+  userId    Int
+  gymId     Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  gym       Gym      @relation(fields: [gymId], references: [id])
+}
+
+model Favorite {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  gymId  Int
+  user   User @relation(fields: [userId], references: [id])
+  gym    Gym  @relation(fields: [gymId], references: [id])
+}
+
+model News {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  gymId     Int
+  createdAt DateTime @default(now())
+  gym       Gym      @relation(fields: [gymId], references: [id])
+}
+
+model Follow {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  gymId  Int
+  user   User @relation(fields: [userId], references: [id])
+  gym    Gym  @relation(fields: [gymId], references: [id])
+}
