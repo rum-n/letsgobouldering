@@ -18,27 +18,45 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials): Promise<User | null> {
-        const user = await prisma.user.findUnique({
-          where: { email: credentials?.email },
-        });
+        try {
+          console.log("Authorize method called");
       
-        if (user && credentials?.password) {
+          if (!credentials?.email || !credentials.password) {
+            console.error("Missing credentials");
+            return null;
+          }
+      
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email },
+          });
+      
+          if (!user) {
+            console.error("No user found with the email:", credentials.email);
+            return null;
+          }
+      
           const isValidPassword = await bcrypt.compare(
             credentials.password,
             user.password
           );
       
-          if (isValidPassword) {
-            return {
-              ...user,
-              id: user.id.toString(), // Convert id to string
-            };
+          if (!isValidPassword) {
+            console.error("Invalid password for user:", credentials.email);
+            return null;
           }
-        }
       
-        // Return null if user data is invalid
-        return null;
-      },
+          console.log("User authenticated successfully:", user.email);
+      
+          return {
+            ...user,
+            id: user.id.toString(),
+            role: user.role, // Ensure that the role is included if it exists
+          };
+        } catch (error) {
+          console.error("Error in authorize method:", error);
+          return null;
+        }
+      }
     }),
   ],
   session: {
@@ -51,14 +69,19 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.role = user.role;
+        token.role = (user as User).role;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id;
-        session.user.role = token.role;
+        if (session.user) {
+          session.user = {
+            ...session.user,
+            id: token.id,
+            role: token.role,
+          } as User;
+        }
       }
       return session;
     },

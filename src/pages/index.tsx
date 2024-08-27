@@ -1,23 +1,56 @@
-import MainLayout from "@/layouts/MainLayout";
-import Link from "next/link";
+// pages/index.tsx
+import { Box, Button, Container, Flex, Heading, Stack, Text, useBreakpointValue } from '@chakra-ui/react';
 
-const HomePage = () => {
+export default function Home() {
+  // const headingSize = useBreakpointValue({ base: '2xl', md: '4xl' });
+
   return (
-    <MainLayout>
-      <div style={{ textAlign: "center", padding: "2rem" }}>
-        <h1>Welcome to Climbing Gym Directory</h1>
-        <p>Your ultimate source for finding climbing gyms worldwide.</p>
-        <div>
-          <Link href="/gyms" style={{ marginRight: "1rem", fontSize: "1.2rem" }}>
-              Browse Gyms
-          </Link>
-          <Link href="/auth/signup" style={{ fontSize: "1.2rem" }}>
-            Sign Up
-          </Link>
-        </div>
-      </div>
-    </MainLayout>
-  );
-};
+    <Container maxW="container.xl" py={10}>
+      {/* Hero Section */}
+      <Flex direction="column" align="center" justify="center" textAlign="center" mb={10}>
+        <Heading as="h1" size={"2xl"} mb={4} bgClip="text">
+          Welcome to ClimbHub
+        </Heading>
+        <Text fontSize="xl" mb={6}>
+          Discover and connect with the best climbing gyms worldwide.
+        </Text>
+        <Button  size="lg">
+          Get Started
+        </Button>
+      </Flex>
 
-export default HomePage;
+      {/* Gym List Section */}
+      <Stack spacing={8}>
+        <Flex wrap="wrap" justify="center">
+          <Box maxW="sm" borderWidth={1} borderRadius="lg" overflow="hidden" p={4}>
+            <Heading as="h3" size="md" mb={2}>
+              Gym Name 1
+            </Heading>
+            <Text mb={4}>Location: City, Country</Text>
+            <Button  variant="outline">
+              View Gym
+            </Button>
+          </Box>
+          <Box maxW="sm" borderWidth={1} borderRadius="lg" overflow="hidden" p={4}>
+            <Heading as="h3" size="md" mb={2}>
+              Gym Name 2
+            </Heading>
+            <Text mb={4}>Location: City, Country</Text>
+            <Button variant="outline">
+              View Gym
+            </Button>
+          </Box>
+          <Box maxW="sm" borderWidth={1} borderRadius="lg" overflow="hidden" p={4}>
+            <Heading as="h3" size="md" mb={2}>
+              Gym Name 3
+            </Heading>
+            <Text mb={4}>Location: City, Country</Text>
+            <Button variant="outline">
+              View Gym
+            </Button>
+          </Box>
+        </Flex>
+      </Stack>
+    </Container>
+  );
+}

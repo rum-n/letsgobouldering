@@ -1,12 +1,29 @@
-import { SessionProvider } from "next-auth/react";
-import { AppProps } from "next/app";
-import "../styles/globals.css";
+import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import type { AppProps } from 'next/app';
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+const theme = extendTheme({
+  colors: {
+    primary: '#4ADE7B',
+    secondary: '#F9CB80',
+  },
+  fonts: {
+    heading: 'Arial, sans-serif',
+    body: 'Arial, sans-serif',
+  },
+  components: {
+    Button: {
+      baseStyle: {
+        fontWeight: 'bold',
+      },
+    },
+  },
+});
+
+function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <SessionProvider session={session}>
+    <ChakraProvider theme={theme}>
       <Component {...pageProps} />
-    </SessionProvider>
+    </ChakraProvider>
   );
 }
 
