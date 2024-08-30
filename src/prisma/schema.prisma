@@ -23,15 +23,17 @@ model User {
 model Gym {
   id          Int      @id @default(autoincrement())
   name        String
-  location    String
+  address     String
+  country     String
   description String?
-  adminId     Int
-  admin       User     @relation("GymAdmin", fields: [adminId], references: [id])
+  adminId     Int?
+  image       String
+  website     String?
+  admin       User?     @relation("GymAdmin", fields: [adminId], references: [id])
   reviews     Review[]
   news        News[]
   follows     Follow[]
-
-  Favorite Favorite[]
+  Favorite    Favorite[]
 }
 
 model Review {
