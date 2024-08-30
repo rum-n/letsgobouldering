@@ -6,11 +6,13 @@ import { User } from "./User";
 export interface Gym {
     id: number;
     name: string;
-    location: string;
-    description: string;
-    adminId: number;
-    admin: User;
-    reviews: Review[];
-    news: News[];
-    follows: Follow[];
+    address: string;
+    country: string;
+    description?: string;
+    adminId?: number;
+    admin?: User;
+    reviews?: Review[];
+    news?: News[];
+    follows?: Follow[];
+    image?: string;
 }

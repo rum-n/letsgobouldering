@@ -1,18 +1,8 @@
+import GymGrid from "@/components/GymGrid";
 import NavBar from "@/components/NavBar";
 import MainLayout from "@/layouts/MainLayout";
+import { Gym } from "@/types/Gym";
 import styled from "styled-components";
-
-const GymGridContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 2rem;
-
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-`;
 
 const HeadingWraper = styled.div`
   position: relative;
@@ -56,6 +46,10 @@ const HeroWrapper = styled.div`
   height: 100vh;
 `;
 
+const mockGyms: Gym[] = [
+ 
+];
+
 const HomePage = () => {
   return (
     <MainLayout>
@@ -72,10 +66,7 @@ const HomePage = () => {
         <p>All your favourite climbing gyms, no matter where you go.</p>
       </HeadingWraper>
       </HeroWrapper>
-      <GymGridContainer>
-        <h2>Search</h2>
-        {/* GymList component goes here */}
-      </GymGridContainer>
+      <GymGrid gyms={mockGyms}/>
     </MainLayout>
   );
 };

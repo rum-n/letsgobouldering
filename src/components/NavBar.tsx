@@ -1,8 +1,9 @@
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Link from "next/link";
 import { useState } from 'react';
 import styled from "styled-components";
-import Modal from './Modal';
+import LoginModal from './LoginModal';
+import AddGymModal from './AddGymModal';
 
 const NavBarContainer = styled.nav`
   position: relative;
@@ -54,6 +55,7 @@ const NavBar = () => {
   const { data: session } = useSession();
 
   const [showModal, setShowModal] = useState(false);
+  const [showAddGymModal, setShowAddGymModal] = useState(false);
 
   const handleModalClose = () => setShowModal(false);
 
@@ -82,7 +84,9 @@ const NavBar = () => {
           <NavButton onClick={() => signOut()} style={{ marginLeft: "10px" }}>
             Logout
             </NavButton>
+            {session.user?.role === "owner" && <NavButton onClick={() => setShowAddGymModal(true)}>Add new gym</NavButton>}
           </>
+          
           ) : (
             <>
           <NavButton onClick={() => setShowModal(true)} style={{ marginLeft: "10px" }}>
@@ -90,7 +94,8 @@ const NavBar = () => {
           </NavButton>
           </>
         )}
-        <Modal showModal={showModal} closeModal={handleModalClose} />
+        <LoginModal showModal={showModal} closeModal={handleModalClose} />
+        <AddGymModal showModal={showAddGymModal} closeModal={()=>setShowAddGymModal(false)} />
       </MenuContainer>
     </NavBarContainer>
   );
