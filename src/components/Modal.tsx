@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const ModalOverlay = styled.div`
-  z-index: 3;
+  z-index: 1000;
   position: absolute;
   top: 0;
   left: 0;
@@ -15,8 +15,8 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContent = styled.div`
-  z-index: 4;
-  background-color: #282c34;
+  z-index: 1001;
+  background-color: #b5b8a3;
   padding: 2rem;
   border-radius: 8px;
   max-width: 400px;
@@ -26,7 +26,7 @@ const ModalContent = styled.div`
 `;
 
 const CloseButton = styled.button`
-  /* position: absolute; */
+  position: absolute;
   top: 10px;
   right: 10px;
   font-size: 1.5rem;
@@ -60,7 +60,11 @@ const ToggleLink = styled.a`
   text-align: center;
   margin-top: 20px;
   cursor: pointer;
-  color: #0070f3;
+
+  :hover {
+    color: #0070f3;
+    text-decoration: underline;
+  }
 `;
 
 interface ModalProps {
@@ -69,9 +73,9 @@ interface ModalProps {
 }
 
 const Modal = ({ showModal, closeModal }: ModalProps) => {
-  const [isLogin, setIsLogin] = useState(true); // Toggle between Login and Signup
+  const [isLogin, setIsLogin] = useState(true);
 
-  if (!showModal) return null; // If modal is not visible, don't render anything
+  if (!showModal) return null;
 
   return (
     <ModalOverlay onClick={closeModal}>
@@ -86,7 +90,6 @@ const Modal = ({ showModal, closeModal }: ModalProps) => {
           </form>
         ) : (
           <form>
-            {/* Signup Form */}
             <Input type="text" placeholder="Name" required />
             <Input type="email" placeholder="Email" required />
             <Input type="password" placeholder="Password" required />

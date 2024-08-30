@@ -16,7 +16,7 @@ const GymGridContainer = styled.div`
 
 const HeadingWraper = styled.div`
   position: relative;
-  z-index: 2; 
+  z-index: 1; 
   color: white; 
   text-align: center;
   margin-top: 5rem;

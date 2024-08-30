@@ -9,13 +9,8 @@ body {
   a {
     color: #fff;
     text-decoration: none;
-    transition: 0.2s ease;
   }
-  
-  a:hover {
-    color: #aaba9e;
-    transition: 0.5s ease;
-  }
+
 
   /* #fcb97d
 #edd892
