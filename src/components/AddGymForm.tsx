@@ -1,3 +1,4 @@
+
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -13,13 +14,12 @@ const NewGymForm = styled.form`
 const AddGymForm = () => {
   const [gymData, setGymData] = useState({
     name: '',
-    city: '',
     country: '',
     address: '',
     description: '',
     website: '',
   });
-  const {data: session} = useSession() as { data: { accessToken?: string } };
+  const {data: session} = useSession();
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -52,7 +52,7 @@ const AddGymForm = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session?.accessToken}`
+            'Authorization': `Bearer ${session?.user?.accessToken}`
           },
           body: JSON.stringify({
             file: base64String,
@@ -92,7 +92,6 @@ const AddGymForm = () => {
   return (
     <NewGymForm onSubmit={handleSubmit}>
       <input type="text" name="name" placeholder="Gym Name" onChange={handleChange} required />
-      <input type="text" name="city" placeholder="City" onChange={handleChange} required />
       <input type="text" name="country" placeholder="Country" onChange={handleChange} required />
       <input type="text" name="address" placeholder="Address" onChange={handleChange} />
       <textarea name="description" placeholder="Description" onChange={handleChange} />

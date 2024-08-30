@@ -50,7 +50,7 @@ export const authOptions: NextAuthOptions = {
           return {
             ...user,
             id: user.id.toString(),
-            role: user.role, // Ensure that the role is included if it exists
+            role: user.role,
           };
         } catch (error) {
           console.error("Error in authorize method:", error);
@@ -80,6 +80,7 @@ export const authOptions: NextAuthOptions = {
             ...session.user,
             id: token.id,
             role: token.role,
+            accessToken: token.accessToken
           } as User;
         }
       }
