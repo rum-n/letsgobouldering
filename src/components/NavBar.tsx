@@ -4,6 +4,11 @@ import { useState } from 'react';
 import styled from "styled-components";
 import LoginModal from './LoginModal';
 import AddGymModal from './AddGymModal';
+import {User as NextAuthUser } from "next-auth";
+
+interface User extends NextAuthUser {
+  role?: string;
+}
 
 const NavBarContainer = styled.nav`
   position: relative;
@@ -45,6 +50,7 @@ const NavButton = styled.button`
   padding: 0.5rem 1rem;
   border-radius: 5px;
   cursor: pointer;
+  margin-left: 1rem;
   
   :hover {
     background-color: #e996b0;
@@ -78,20 +84,20 @@ const NavBar = () => {
       </ul>
         {session ? (
           <>
-          <Link href="/profile" style={{ marginRight: "10px" }}>
+          <Link href="/profile">
             Profile
           </Link>
-          <NavButton onClick={() => signOut()} style={{ marginLeft: "10px" }}>
+          <NavButton onClick={() => signOut()}>
             Logout
             </NavButton>
-            {session.user?.role === "owner" && <NavButton onClick={() => setShowAddGymModal(true)}>Add new gym</NavButton>}
+            {(session.user as User)?.role === "owner" && <NavButton onClick={() => setShowAddGymModal(true)}>Add new gym</NavButton>}
           </>
           
           ) : (
-            <>
-          <NavButton onClick={() => setShowModal(true)} style={{ marginLeft: "10px" }}>
-            Login
-          </NavButton>
+          <>
+            <NavButton onClick={() => setShowModal(true)}>
+              Login
+            </NavButton>
           </>
         )}
         <LoginModal showModal={showModal} closeModal={handleModalClose} />

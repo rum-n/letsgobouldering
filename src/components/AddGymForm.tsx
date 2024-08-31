@@ -34,7 +34,6 @@ const AddGymForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
     if (!imageFile) {
       console.error('No image file selected');
       return;
@@ -52,7 +51,7 @@ const AddGymForm = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session?.user?.accessToken}`
+            // 'Authorization': `Bearer ${session?.user?.}`,
           },
           body: JSON.stringify({
             file: base64String,

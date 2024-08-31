@@ -32,7 +32,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const contentType = match[1];
       const base64DataStartIndex = file.indexOf(',');
       if (base64DataStartIndex !== -1) {
-        const base64Prefix = file.slice(0, base64DataStartIndex + 1); // slice until the comma
         const base64Data = file.slice(base64DataStartIndex + 1).trim(); // start from after the comma and trim
         
         // Convert the base64 string back to a Buffer
@@ -42,8 +41,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.log('Uploading file:', filename);
         
         // Upload the image to Supabase storage with correct content type
-        const { data, error } = await supabase.storage
-        .from('gym-images')
+        const { error } = await supabase.storage
+        .from('/gym-images')
         .upload(`${filename}`, binaryData, {
           contentType,
           cacheControl: '3600',
@@ -57,7 +56,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Fetch the public URL of the uploaded file
         const { data: publicUrlData } = supabase
         .storage
-        .from('gym-images')
+        .from('/gym-images')
         .getPublicUrl(`${filename}`);
         
         res.status(200).json({ message: 'File uploaded successfully', publicUrl: publicUrlData.publicUrl });
@@ -65,7 +64,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Handle non-base64 file format (e.g., binary data)
         const binaryData = Buffer.from(file, 'binary');
         const { data, error } = await supabase.storage
-        .from('gym-images')
+        .from('/gym-images')
         .upload(`${filename}`, binaryData, {
           contentType: 'application/octet-stream', // default content type for binary data
           cacheControl: '3600',
@@ -80,7 +79,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Fetch the public URL of the uploaded file
         const { data: publicUrlData } = supabase
         .storage
-        .from('gym-images')
+        .from('/gym-images')
         .getPublicUrl(`${filename}`);
         
         res.status(200).json({ message: 'File uploaded successfully', publicUrl: publicUrlData.publicUrl });
