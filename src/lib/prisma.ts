@@ -1,16 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 
-// Check if we're in a development environment
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
+declare global {
+  // This prevents issues with hot-reloading in development environments
+  var prisma: PrismaClient | undefined;
+}
 
-// Use a global variable for Prisma client during development to avoid multiple instances
-export const prisma =
-  globalForPrisma.prisma ||
-  new PrismaClient({
-    log: ["query", "info", "warn", "error"],
-  });
+const prisma = global.prisma || new PrismaClient();
 
-// If we're not in production, attach the client to the global object
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== "production") global.prisma = prisma;
 
 export default prisma;

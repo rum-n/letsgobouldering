@@ -38,7 +38,7 @@ const AddGymModal = ({ showModal, closeModal }: ModalProps) => {
   return (
     <ModalOverlay onClick={closeModal}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
-        <AddGymForm/>
+        <AddGymForm />
       </ModalContent>
     </ModalOverlay>
   );

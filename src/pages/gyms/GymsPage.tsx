@@ -18,7 +18,7 @@ const GymList = (gyms: Gym[]) => {
       <ul>
         {gyms.map((gym) => (
           <li key={gym.id}>
-            {gym.name} - {gym.location}
+            {gym.name} - {gym.address}
           </li>
         ))}
       </ul>

@@ -1,9 +1,10 @@
 import { Gym } from "@/types/Gym";
+import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
 
 interface GymCardProps {
-    gym: Gym;
+  gym: Gym;
 }
 
 const GymCardContainer = styled.div`
@@ -26,12 +27,14 @@ const GymCardBackgroundImage = styled.div<{ image?: string }>`
 
 const GymCard = ({ gym }: GymCardProps) => {
   return (
-    <GymCardContainer>
-      <GymCardBackgroundImage image={gym.image} />
-      <h2>{gym.name}</h2>
-      <p>{gym.address}</p>
-      <p>{gym.description}</p>
-    </GymCardContainer>
+    <Link href={`/gyms/${gym.id}`}>
+      <GymCardContainer>
+        <GymCardBackgroundImage image={gym.image} />
+        <h2>{gym.name}</h2>
+        <p>{gym.address}</p>
+        <p>{gym.description}</p>
+      </GymCardContainer>
+    </Link>
   );
 };
 

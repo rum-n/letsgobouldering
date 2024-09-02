@@ -20,33 +20,33 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials): Promise<User | null> {
         try {
           console.log("Authorize method called");
-      
+
           if (!credentials?.email || !credentials.password) {
             console.error("Missing credentials");
             return null;
           }
-      
+
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
           });
-      
+
           if (!user) {
             console.error("No user found with the email:", credentials.email);
             return null;
           }
-      
+
           const isValidPassword = await bcrypt.compare(
             credentials.password,
             user.password
           );
-      
+
           if (!isValidPassword) {
             console.error("Invalid password for user:", credentials.email);
             return null;
           }
-      
+
           console.log("User authenticated successfully:", user.email);
-      
+
           return {
             ...user,
             id: user.id.toString(),

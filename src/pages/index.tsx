@@ -2,6 +2,7 @@ import GymGrid from "@/components/GymGrid";
 import NavBar from "@/components/NavBar";
 import MainLayout from "@/layouts/MainLayout";
 import { Gym } from "@/types/Gym";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const HeadingWraper = styled.div`
@@ -46,27 +47,48 @@ const HeroWrapper = styled.div`
   height: 100vh;
 `;
 
-const mockGyms: Gym[] = [
- 
-];
-
 const HomePage = () => {
+  const [gyms, setGyms] = useState<Gym[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchGyms = async () => {
+    try {
+      const res = await fetch("/api/gyms/get");
+      if (!res.ok) throw new Error("Failed to fetch gyms");
+
+      const data: Gym[] = await res.json();
+      setGyms(data);
+    } catch (error) {
+      console.error("Error fetching gyms:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchGyms();
+  }, []);
+
+  if (loading) {
+    return <p>Loading gyms...</p>;
+  }
+
   return (
     <MainLayout>
       <HeroWrapper>
-      <NavBar />
-      <VideoWrapper>
-      <video autoPlay muted loop>
-        <source src="/climbing1.mp4" type="video/mp4" />
-      </video>
-      <Overlay />
-      </VideoWrapper>
-      <HeadingWraper>
-        <h1>Indoor climbing, everywhere</h1>
-        <p>All your favourite climbing gyms, no matter where you go.</p>
-      </HeadingWraper>
+        <NavBar />
+        <VideoWrapper>
+          <video autoPlay muted loop>
+            <source src="/climbing1.mp4" type="video/mp4" />
+          </video>
+          <Overlay />
+        </VideoWrapper>
+        <HeadingWraper>
+          <h1>Indoor climbing, everywhere</h1>
+          <p>All your favourite climbing gyms, no matter where you go.</p>
+        </HeadingWraper>
       </HeroWrapper>
-      <GymGrid gyms={mockGyms}/>
+      <GymGrid gyms={gyms} />
     </MainLayout>
   );
 };

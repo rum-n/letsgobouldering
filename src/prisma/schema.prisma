@@ -3,37 +3,39 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   name      String?
-  email     String   @unique
+  email     String     @unique
   password  String
-  role      String   @default("user")
-  gyms      Gym[]    @relation("GymAdmin")
-  reviews   Review[]
+  role      String     @default("user")
   favorites Favorite[]
   follows   Follow[]
+  gyms      Gym[]      @relation("GymAdmin")
+  reviews   Review[]
 }
 
 model Gym {
-  id          Int      @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   name        String
-  address     String
-  country     String
   description String?
   adminId     Int?
+  address     String
+  country     String
   image       String
   website     String?
-  admin       User?     @relation("GymAdmin", fields: [adminId], references: [id])
-  reviews     Review[]
-  news        News[]
-  follows     Follow[]
   Favorite    Favorite[]
+  follows     Follow[]
+  admin       User?      @relation("GymAdmin", fields: [adminId], references: [id])
+  news        News[]
+  reviews     Review[]
+
+  @@unique([name, address])
 }
 
 model Review {
@@ -43,16 +45,16 @@ model Review {
   userId    Int
   gymId     Int
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
   gym       Gym      @relation(fields: [gymId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Favorite {
   id     Int  @id @default(autoincrement())
   userId Int
   gymId  Int
-  user   User @relation(fields: [userId], references: [id])
   gym    Gym  @relation(fields: [gymId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
 }
 
 model News {
@@ -68,6 +70,6 @@ model Follow {
   id     Int  @id @default(autoincrement())
   userId Int
   gymId  Int
-  user   User @relation(fields: [userId], references: [id])
   gym    Gym  @relation(fields: [gymId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
 }
