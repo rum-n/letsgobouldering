@@ -32,7 +32,11 @@ const AddGymButton = styled.button`
   border: 1px solid #020a78;
   `;
 
-const AddGymForm = () => {
+interface AddGymFormProps {
+  onSuccess: () => void;
+}
+
+const AddGymForm = ({ onSuccess }: AddGymFormProps) => {
   const router = useRouter();
   const [gymData, setGymData] = useState({
     name: '',
@@ -69,6 +73,7 @@ const AddGymForm = () => {
         throw new Error('Failed to add gym');
       }
       const data = await gymResponse.json();
+      onSuccess();
       console.log('Gym added successfully:', data);
     } catch (error) {
       console.error('Error adding gym:', error);

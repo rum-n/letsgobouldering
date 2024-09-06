@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import AddGymForm from './AddGymForm';
+import { useRouter } from 'next/router';
 
 const ModalOverlay = styled.div`
   z-index: 1000;
@@ -32,13 +33,18 @@ interface ModalProps {
 }
 
 const AddGymModal = ({ showModal, closeModal }: ModalProps) => {
-
+  const router = useRouter();
   if (!showModal) return null;
+
+  const handleSuccess = () => {
+    closeModal();
+    router.reload();
+  }
 
   return (
     <ModalOverlay onClick={closeModal}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
-        <AddGymForm />
+        <AddGymForm onSuccess={() => handleSuccess()} />
       </ModalContent>
     </ModalOverlay>
   );
