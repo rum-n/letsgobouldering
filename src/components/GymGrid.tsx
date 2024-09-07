@@ -8,6 +8,7 @@ interface GymCardProps {
 }
 
 const GymGridContainer = styled.div`
+    min-height: 100vh;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1rem;

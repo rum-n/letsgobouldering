@@ -1,23 +1,29 @@
 import { signOut, useSession } from 'next-auth/react';
 import Link from "next/link";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from "styled-components";
 import LoginModal from './LoginModal';
 import AddGymModal from './AddGymModal';
-import {User as NextAuthUser } from "next-auth";
+import { User as NextAuthUser } from "next-auth";
 
 interface User extends NextAuthUser {
   role?: string;
 }
 
-const NavBarContainer = styled.nav`
-  position: relative;
-  z-index: 2;
+const NavBarContainer = styled.nav<{ isScrolled: boolean }>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
   flex-direction: row;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0 2rem;
+  padding: 0 2rem;
+  background-color: ${(props) => (props.isScrolled ? '#5a5a5a' : 'transparent')};
+  transition: background-color 0.3s ease;
+  box-shadow: ${(props) => (props.isScrolled ? '0 2px 5px rgba(0,0,0,0.1)' : 'none')};
 `;
 
 const LogoContainer = styled.div``;
@@ -63,37 +69,54 @@ const NavBar = () => {
   const [showModal, setShowModal] = useState(false);
   const [showAddGymModal, setShowAddGymModal] = useState(false);
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
   const handleModalClose = () => setShowModal(false);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <NavBarContainer>
+    <NavBarContainer isScrolled={isScrolled}>
       <LogoContainer>
         <h1>Let's go bouldering</h1>
       </LogoContainer>
       <MenuContainer>
-      <ul>
-        <li>
-          <Link href="/gyms">Gyms</Link>
-        </li>
-        <li>
-          <Link href="/gyms">Map</Link>
-        </li>
-        <li>
-          <Link href="/dashboard">Dashboard</Link>
-        </li>
-      </ul>
+        <ul>
+          <li>
+            <Link href="/gyms">Gyms</Link>
+          </li>
+          <li>
+            <Link href="/gyms">Map</Link>
+          </li>
+          <li>
+            <Link href="/dashboard">Dashboard</Link>
+          </li>
+        </ul>
         {session ? (
           <>
-          <Link href="/profile">
-            Profile
-          </Link>
-          <NavButton onClick={() => signOut()}>
-            Logout
+            <Link href="/profile">
+              Profile
+            </Link>
+            <NavButton onClick={() => signOut()}>
+              Logout
             </NavButton>
             {(session.user as User)?.role === "owner" && <NavButton onClick={() => setShowAddGymModal(true)}>Add new gym</NavButton>}
           </>
-          
-          ) : (
+
+        ) : (
           <>
             <NavButton onClick={() => setShowModal(true)}>
               Login
@@ -101,7 +124,7 @@ const NavBar = () => {
           </>
         )}
         <LoginModal showModal={showModal} closeModal={handleModalClose} />
-        <AddGymModal showModal={showAddGymModal} closeModal={()=>setShowAddGymModal(false)} />
+        <AddGymModal showModal={showAddGymModal} closeModal={() => setShowAddGymModal(false)} />
       </MenuContainer>
     </NavBarContainer>
   );
