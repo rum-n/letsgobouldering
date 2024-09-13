@@ -1,7 +1,8 @@
 import { Gym } from "@/types/Gym";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 interface GymCardProps {
@@ -53,6 +54,27 @@ const FollowButton = styled.button``
 
 const GymCard = ({ gym }: GymCardProps) => {
   const { data: session } = useSession();
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [error, setError] = useState('');
+  const router = useRouter();
+
+  const handleFollow = async (id: number) => {
+    try {
+      const res = await fetch(`/api/gyms/${id}/follow`, {
+        method: 'POST',
+      });
+
+      if (res.ok) {
+        setIsFollowing(true);
+      } else {
+        const errorData = await res.json();
+        setError(errorData.message);
+      }
+    } catch (error) {
+      console.error('Error following gym:', error);
+      setError('An error occurred while following the gym');
+    }
+  };
 
   return (
     <GymCardContainer>
@@ -67,7 +89,7 @@ const GymCard = ({ gym }: GymCardProps) => {
             fontWeight: 'bold',
             border: '1px solid #000'
           }}>See details</Link>
-          {session && <FollowButton>Follow</FollowButton>}
+          {session && <FollowButton onClick={() => handleFollow(gym.id)} disabled={isFollowing}>Follow</FollowButton>}
         </ActionsWrapper>
       </GymCardContent>
     </GymCardContainer>

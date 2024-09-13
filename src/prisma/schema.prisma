@@ -9,19 +9,18 @@ datasource db {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  name      String?
-  email     String     @unique
-  password  String
-  role      String     @default("user")
-  favorites Favorite[]
-  follows   Follow[]
-  gyms      Gym[]      @relation("GymAdmin")
-  reviews   Review[]
+  id       Int      @id @default(autoincrement())
+  name     String?
+  email    String   @unique
+  password String
+  role     String   @default("user")
+  follows  Follow[]
+  gyms     Gym[]    @relation("GymAdmin")
+  reviews  Review[]
 }
 
 model Gym {
-  id          Int        @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   description String?
   adminId     Int?
@@ -29,9 +28,8 @@ model Gym {
   country     String
   image       String
   website     String?
-  Favorite    Favorite[]
   follows     Follow[]
-  admin       User?      @relation("GymAdmin", fields: [adminId], references: [id])
+  admin       User?    @relation("GymAdmin", fields: [adminId], references: [id])
   news        News[]
   reviews     Review[]
 
@@ -47,14 +45,6 @@ model Review {
   createdAt DateTime @default(now())
   gym       Gym      @relation(fields: [gymId], references: [id])
   user      User     @relation(fields: [userId], references: [id])
-}
-
-model Favorite {
-  id     Int  @id @default(autoincrement())
-  userId Int
-  gymId  Int
-  gym    Gym  @relation(fields: [gymId], references: [id])
-  user   User @relation(fields: [userId], references: [id])
 }
 
 model News {
