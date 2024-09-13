@@ -21,7 +21,7 @@ const NavBarContainer = styled.nav<{ isScrolled: boolean }>`
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-  background-color: ${(props) => (props.isScrolled ? '#7C7C7C' : 'transparent')};
+  background-color: ${(props) => (props.isScrolled ? '#7c7c7c78' : 'transparent')};
   transition: background-color 0.3s ease;
   box-shadow: ${(props) => (props.isScrolled ? '0 2px 5px rgba(0,0,0,0.1)' : 'none')};
 `;
@@ -49,11 +49,6 @@ const MenuContainer = styled.div`
 
 const NavButton = styled.button`
   color: #000;
-  border: none;
-  font-size: 1rem;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
   cursor: pointer;
   margin-left: 1rem;
 `;

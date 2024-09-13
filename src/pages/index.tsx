@@ -56,13 +56,7 @@ const SearchInput = styled.input`
 `;
 
 const SearchButton = styled.button`
-  padding: 8px 16px;
-  font-size: 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
   margin: 0 1rem;
-  font-weight: bold;
 `;
 
 const GymListToolbar = styled.div`
