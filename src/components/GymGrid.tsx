@@ -11,14 +11,15 @@ const GymGridContainer = styled.div`
     min-height: 100vh;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
+    gap: 2rem;
     margin: 1rem;
+    padding: 0 5rem;
 `;
 
 const GymGrid = ({ gyms }: GymCardProps) => {
     return (
         <GymGridContainer>
-            {gyms.map((gym) => (
+            {gyms?.map((gym) => (
                 <GymCard key={gym.id} gym={gym} />
             ))}
         </GymGridContainer>

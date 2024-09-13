@@ -51,18 +51,18 @@ const SearchInput = styled.input`
   width: 30rem;
   padding: 8px;
   font-size: 16px;
-  border: 1px solid #ddd;
+  border: none;
   border-radius: 4px;
 `;
 
 const SearchButton = styled.button`
   padding: 8px 16px;
   font-size: 16px;
-  border: 1px solid #ddd;
+  border: none;
   border-radius: 4px;
-  background-color: #f3f3f3;
   cursor: pointer;
   margin: 0 1rem;
+  font-weight: bold;
 `;
 
 const GymListToolbar = styled.div`
@@ -74,6 +74,7 @@ const GymListToolbar = styled.div`
 
 const HomePage = () => {
   const [gyms, setGyms] = useState<Gym[]>([]);
+  const [allGyms, setAllGyms] = useState<Gym[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -84,6 +85,7 @@ const HomePage = () => {
         const response = await fetch('/api/gyms/get');
         const data = await response.json();
         setGyms(data);
+        setAllGyms(data);
       } catch (error) {
         console.error('Error fetching gyms:', error);
       } finally {
@@ -94,14 +96,18 @@ const HomePage = () => {
     fetchAllGyms();
   }, []);
 
-  const handleSearch = async () => {
-    // event.preventDefault();
+  const handleSearch = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const searchParams = new URLSearchParams();
     if (searchQuery.trim() === '') {
-      return;
+      setGyms(allGyms);
+    } else {
+      searchParams.append('search', searchQuery);
     }
+
     setLoading(true);
     try {
-      const response = await fetch(`/api/gyms/get?search=${searchQuery}`);
+      const response = await fetch(`/api/gyms/get?${searchParams.toString()}`);
       const data = await response.json();
       setGyms(data);
     } catch (error) {
@@ -127,15 +133,17 @@ const HomePage = () => {
         </HeadingWraper>
       </HeroWrapper>
       <GymListToolbar>
-        <SearchInput
-          type="text"
-          placeholder="Search gyms by name, city, or country"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <SearchButton onClick={handleSearch}>Search</SearchButton>
+        <form onSubmit={handleSearch}>
+          <SearchInput
+            type="text"
+            placeholder="Search gyms by name, city, or country"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <SearchButton type="submit" disabled={loading}>{loading ? 'Searching...' : 'Search'}</SearchButton>
+        </form>
       </GymListToolbar>
-      {!loading ? <GymGrid gyms={gyms} /> : <p>Loading...</p>}
+      {!loading && !!gyms.length ? <GymGrid gyms={gyms} /> : <p>Loading...</p>}
     </MainLayout>
   );
 };

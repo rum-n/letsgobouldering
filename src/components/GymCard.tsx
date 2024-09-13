@@ -8,14 +8,17 @@ interface GymCardProps {
 }
 
 const GymCardContainer = styled.div`
-  background-color: #b5b8a3;
-  padding: 1rem;
+  background-color: #7C7C7C;
   border-radius: 8px;
   margin: 1rem;
-  max-width: 300px;
+  max-width: 320px;
   width: 100%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-`;
+  `;
+
+const GymCardContent = styled.div`
+  padding: 0 1rem 1rem;
+`
 
 const GymCardBackgroundImage = styled.div<{ image?: string }>`
   background-image: url(${(props) => props.image || ''});
@@ -30,9 +33,11 @@ const GymCard = ({ gym }: GymCardProps) => {
     <Link href={`/gyms/${gym.id}`}>
       <GymCardContainer>
         <GymCardBackgroundImage image={gym.image} />
-        <h2>{gym.name}</h2>
-        <p>{gym.address}</p>
-        <p>{gym.description}</p>
+        <GymCardContent>
+          <h2>{gym.name}</h2>
+          <p>{gym.address}</p>
+          <p>{gym.description}</p>
+        </GymCardContent>
       </GymCardContainer>
     </Link>
   );
