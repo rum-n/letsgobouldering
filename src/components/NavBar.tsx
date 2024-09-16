@@ -81,7 +81,7 @@ const NavBar = () => {
   return (
     <NavBarContainer isScrolled={isScrolled}>
       <LogoContainer>
-        <h1>Let's go bouldering</h1>
+        <h1>Boulder Monday</h1>
       </LogoContainer>
       <MenuContainer>
         <ul>

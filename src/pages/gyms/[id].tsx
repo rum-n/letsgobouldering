@@ -1,6 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import prisma from "../../lib/prisma";
+import Image from "next/image";
 
 interface Gym {
     id: number;
@@ -26,7 +27,7 @@ const GymPage = ({ gym }: GymPageProps) => {
             <h1>{gym.name}</h1>
             <p>{gym.location}</p>
             {gym.description && <p>{gym.description}</p>}
-            {gym.image && <img src={gym.image} alt={gym.name} />}
+            {gym.image && <Image src={gym.image} alt={gym.name} />}
         </div>
     );
 };
