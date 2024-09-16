@@ -37,7 +37,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
         select: { id: true },
     });
 
-    const paths = gyms.map((gym) => ({
+    const paths = (gyms as Gym[]).map((gym: Gym) => ({
         params: { id: gym.id.toString() },
     }));
 
