@@ -7,6 +7,7 @@ import styled from "styled-components";
 
 interface GymCardProps {
   gym: Gym;
+  isFollowing: boolean;
 }
 
 const GymCardContainer = styled.div`
@@ -52,24 +53,16 @@ const ActionsWrapper = styled.div`
 const FollowButton = styled.button``
 
 
-const GymCard = ({ gym }: GymCardProps) => {
+const GymCard = ({ gym, isFollowing }: GymCardProps) => {
   const { data: session } = useSession();
-  const [isFollowing, setIsFollowing] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
 
   const handleFollow = async (id: number) => {
     try {
-      const res = await fetch(`/api/gyms/${id}/follow`, {
+      await fetch(`/api/gyms/${id}/follow`, {
         method: 'POST',
       });
-
-      if (res.ok) {
-        setIsFollowing(true);
-      } else {
-        const errorData = await res.json();
-        setError(errorData.message);
-      }
     } catch (error) {
       console.error('Error following gym:', error);
       setError('An error occurred while following the gym');
@@ -89,7 +82,7 @@ const GymCard = ({ gym }: GymCardProps) => {
             fontWeight: 'bold',
             border: '1px solid #000'
           }}>See details</Link>
-          {session && <FollowButton onClick={() => handleFollow(gym.id)} disabled={isFollowing}>Follow</FollowButton>}
+          {session && !isFollowing && <FollowButton onClick={() => handleFollow(gym.id)} disabled={isFollowing}>Follow</FollowButton>}
         </ActionsWrapper>
       </GymCardContent>
     </GymCardContainer>
