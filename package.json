@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx prisma db push --schema='/src/prisma/schema.prisma' && npx prisma generate && next build",
+    "build": "npx prisma db push --schema='prisma/schema.prisma' && npx prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate"
@@ -35,5 +35,8 @@
     "eslint-config-next": "14.2.6",
     "prisma": "^5.19.0",
     "typescript": "^5"
+  },
+  "prisma": {
+    "schema": "prisma/schema.prisma"
   }
 }
