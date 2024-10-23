@@ -11,11 +11,10 @@ interface GymCardProps {
 }
 
 const GymCardContainer = styled.div`
-  background-color: #7C7C7C;
+  background-color: #fff;
   border-radius: 8px;
   max-width: 320px;
   width: 100%;
-  height: 350px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
@@ -35,6 +34,7 @@ const GymTitle = styled.h2`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  margin: 0.5rem 0;
 `
 
 const GymAddress = styled.p`
@@ -77,10 +77,6 @@ const GymCard = ({ gym, isFollowing }: GymCardProps) => {
         <GymAddress>{gym.address}</GymAddress>
         <ActionsWrapper>
           <Link href={`/gyms/${gym.id}`} style={{
-            padding: '0.5rem 1rem',
-            borderRadius: '5px',
-            fontWeight: 'bold',
-            border: '1px solid #000'
           }}>See details</Link>
           {session && !isFollowing && <FollowButton onClick={() => handleFollow(gym.id)} disabled={isFollowing}>Follow</FollowButton>}
         </ActionsWrapper>

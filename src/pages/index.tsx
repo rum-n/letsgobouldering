@@ -3,7 +3,15 @@ import NavBar from "@/components/NavBar";
 import MainLayout from "@/layouts/MainLayout";
 import { Gym } from "@/types/Gym";
 import { useEffect, useState } from "react";
+import { set } from "react-hook-form";
 import styled from "styled-components";
+
+export interface GymsResponse {
+  gyms: Gym[];
+  page: number;
+  totalGyms: number;
+  totalPages: number;
+}
 
 const HeadingWraper = styled.div`
   position: relative;
@@ -51,7 +59,7 @@ const SearchInput = styled.input`
   width: 30rem;
   padding: 8px;
   font-size: 16px;
-  border: none;
+  border: 1px solid #333;
   border-radius: 4px;
 `;
 
@@ -66,44 +74,79 @@ const GymListToolbar = styled.div`
   align-items: center;
 `;
 
+const Pagination = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+`
+
+const PaginationButton = styled.button`
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+
+    &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
+    &:hover {
+        background-color: #f0f0f0;
+    }
+`
+
 const HomePage = () => {
-  const [gyms, setGyms] = useState<Gym[]>([]);
-  const [allGyms, setAllGyms] = useState<Gym[]>([]);
+  const [gymsData, setGymsData] = useState<GymsResponse>();
+  const [allGyms, setAllGyms] = useState<GymsResponse>();
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {
-    const fetchAllGyms = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch('/api/gyms/get');
-        const data = await response.json();
-        setGyms(data);
-        setAllGyms(data);
-      } catch (error) {
-        console.error('Error fetching gyms:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchAllGyms = async (page: number) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/gyms/get?page=${page}&limit=20`);
+      const data = await response.json();
+      setGymsData(data);
+      setAllGyms(data);
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      console.error('Error fetching gyms:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchAllGyms();
-  }, []);
+  useEffect(() => {
+    fetchAllGyms(page);
+  }, [page]);
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setPage(newPage);
+    }
+  };
 
   const handleSearch = async (event: React.FormEvent) => {
     event.preventDefault();
     const searchParams = new URLSearchParams();
     if (searchQuery.trim() === '') {
-      setGyms(allGyms);
+      setGymsData(allGyms);
     } else {
       searchParams.append('search', searchQuery);
     }
 
     setLoading(true);
     try {
-      const response = await fetch(`/api/gyms/get?${searchParams.toString()}`);
+      const response = await fetch(`/api/gyms/get?page=${page}&limit=20&${searchParams.toString()}`);
       const data = await response.json();
-      setGyms(data);
+      setGymsData(data);
+      setTotalPages(data.totalPages);
     } catch (error) {
       console.error('Error fetching gyms:', error);
     } finally {
@@ -122,7 +165,7 @@ const HomePage = () => {
           <Overlay />
         </VideoWrapper>
         <HeadingWraper>
-          <h1>Indoor climbing, everywhere</h1>
+          <h1>Start your week with a climb</h1>
           <p>All your favourite climbing gyms, no matter where you go.</p>
         </HeadingWraper>
       </HeroWrapper>
@@ -137,7 +180,16 @@ const HomePage = () => {
           <SearchButton type="submit" disabled={loading}>{loading ? 'Searching...' : 'Search'}</SearchButton>
         </form>
       </GymListToolbar>
-      {!loading && !!gyms.length ? <GymGrid gyms={gyms} /> : <p>Loading...</p>}
+      {!loading && gymsData ? <GymGrid gyms={gymsData.gyms} /> : <div>Loading...</div>}
+      <Pagination>
+        <PaginationButton onClick={() => handlePageChange(page - 1)} disabled={page === 1}>
+          Previous
+        </PaginationButton>
+        <span>Page {page} of {totalPages}</span>
+        <PaginationButton onClick={() => handlePageChange(page + 1)} disabled={page === totalPages}>
+          Next
+        </PaginationButton>
+      </Pagination>
     </MainLayout>
   );
 };

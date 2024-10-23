@@ -84,7 +84,7 @@ const NavBar = () => {
         <h1>Boulder Monday</h1>
       </LogoContainer>
       <MenuContainer>
-        <ul>
+        {/* <ul>
           <li>
             <Link href="/gyms">Gyms</Link>
           </li>
@@ -94,12 +94,12 @@ const NavBar = () => {
           <li>
             <Link href="/dashboard">Dashboard</Link>
           </li>
-        </ul>
+        </ul> */}
         {session ? (
           <>
-            <Link href="/profile">
+            {/* <Link href="/profile">
               Profile
-            </Link>
+            </Link> */}
             <NavButton onClick={() => signOut()}>
               Logout
             </NavButton>

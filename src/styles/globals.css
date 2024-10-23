@@ -2,28 +2,27 @@ body {
   margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background-color: #383D3B;
-  color: #EEE5E9;
+  background-color: #fff;
+  color: #13070C;
 }
 
 a {
-  color: #fff;
+  color: #13070C;
   text-decoration: none;
 }
 
 button {
-  background-color: #92DCE5;
+  /* background-color: #DDC8C4; */
   transition: 0.2s ease-in;
   cursor: pointer;
   font-size: 1rem;
-  font-weight: 600;
   padding: 0.5rem 1rem;
   border-radius: 5px;
   border: none;
 }
 
 button:hover {
-  background-color: #52DEE5;
+  background-color: #ddc8c4c6;
   transition: 0.2s ease-in;
 }
 

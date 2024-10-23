@@ -16,6 +16,8 @@ const GymGridContainer = styled.div`
     padding: 0 5rem;
 `;
 
+
+
 const GymGrid = ({ gyms }: GymCardProps) => {
     const [followedGymIds, setFollowedGymIds] = useState<number[]>([]);
 
@@ -39,9 +41,10 @@ const GymGrid = ({ gyms }: GymCardProps) => {
         return followedGymIds.some((id) => id === gym.id);
     }, [followedGymIds]);
 
+
     return (
         <GymGridContainer>
-            {gyms?.map((gym) => (
+            {gyms && gyms.map((gym) => (
                 <GymCard key={gym.id} gym={gym} isFollowing={isFollowingGym(gym)} />
             ))}
         </GymGridContainer>
